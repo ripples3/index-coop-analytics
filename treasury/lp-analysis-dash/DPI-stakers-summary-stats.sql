@@ -377,10 +377,16 @@ left join index_reward_claimed as ic on bal.address = ic.address
 left join after_first_claim_transfers afct on bal.address = afct.address
 )
 
-select sum(case when lp_rank <= 10 then "LP Tokens Currently Staked" else 0 end) as "LP Token Balance for Top 10"
+select sum(case when lp_rank <= 5 then "LP Tokens Currently Staked" else 0 end) as "LP Token Balance for Top 5"
     , sum("LP Tokens Currently Staked") as "Total LP Tokens Staked"
+    , sum(case when lp_rank <= 5 then "LP Tokens Currently Staked" else 0 end) * 100 
+        / sum("LP Tokens Currently Staked") as "LP Token Concentration in Top 5"
+    , sum(case when lp_rank <= 10 then "LP Tokens Currently Staked" else 0 end) as "LP Token Balance for Top 10"
     , sum(case when lp_rank <= 10 then "LP Tokens Currently Staked" else 0 end) * 100 
         / sum("LP Tokens Currently Staked") as "LP Token Concentration in Top 10"
+    , sum(case when lp_rank <= 20 then "LP Tokens Currently Staked" else 0 end) as "LP Token Balance for Top 20"
+    , sum(case when lp_rank <= 20 then "LP Tokens Currently Staked" else 0 end) * 100 
+        / sum("LP Tokens Currently Staked") as "LP Token Concentration in Top 20"
     , sum("Total INDEX rewards earned (estimate)" + "Total INDEX rewards claimed (precise)") as "Outstanding INDEX to be claimed"
     , sum(case when account_type = 'Hodler' then "Total INDEX rewards earned (estimate)" + "Total INDEX rewards claimed (precise)"
         else 0 end) as "Outstanding INDEX to be claimed - Hodlers"
